@@ -271,7 +271,7 @@ public class Shop {
             sb.append("seals, ");
         if(fcc)
             sb.append("credits, ");
-        sb.substring(0, sb.length()-2);
-        return String.format("[SHP] %s @ %s in %s%s, sells for %s", name, lid.get(), location, otherLocations, sb.toString());
+        String currencies = sb.substring(0, sb.length()-2);
+        return String.format("[SHP] %s @ %s in %s%s, sells for %s", name, lid.get(), location, otherLocations, currencies);
     }
 }

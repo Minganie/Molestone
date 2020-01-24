@@ -167,6 +167,13 @@ public class Quest {
         category = doc.select(".db-view__detail__content_type").first().text();
         type = findQuestType(doc.select(".db-view__detail__lname_name").first().parent().className());
         title = doc.select(".db-view__detail__lname_name").first().text();
+        int c = Character.codePointAt(title, 0);
+        if(c == 57534 || c == 57535) {
+            // the weird down arrow on the Lodestone for (I think) dailies,
+            // look at A Romp around the Foothills
+            // and there's a x for Finding Your Voice
+            title = title.substring(1, title.length()).trim();
+        }
         level = parseLevel(doc.select(".db-view__detail__level").text());
         bannerUrl = doc.select(".db-view__detail__visual > img:nth-child(1)").attr("src");
         Elements season = doc.select(".db-view__quest__past_season_event");

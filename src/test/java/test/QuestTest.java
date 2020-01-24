@@ -4,6 +4,7 @@ import org.junit.Test;
 import quest.Quest;
 import util.*;
 
+import java.awt.*;
 import java.util.Map;
 
 import static org.junit.Assert.*;
@@ -213,6 +214,24 @@ public class QuestTest {
         try {
             Quest blue = Quest.get(lid);
             // Does it parse? the duty req is a carnivale stage, not a duty
+        } catch (Exception e) {
+            fail(e.getMessage());
+        }
+    }
+
+    @Test
+    public void testNonPrintableChars() throws Exception {
+        Lid lid = new Lid("c766556122d");
+        try {
+            Quest romp = Quest.get(lid);
+            assertEquals("A Romp around the Foothills", romp.getTitle());
+        } catch (Exception e) {
+            fail(e.getMessage());
+        }
+        lid = new Lid("bf6394ecf52");
+        try {
+            Quest voice = Quest.get(lid);
+            assertEquals("Finding Your Voice", voice.getTitle());
         } catch (Exception e) {
             fail(e.getMessage());
         }

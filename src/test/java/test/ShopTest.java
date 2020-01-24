@@ -246,4 +246,15 @@ public class ShopTest {
             fail("Inappropriate parsing for " + shopLid + " because " + e.getMessage());
         }
     }
+
+    @Test
+    public void testToString() throws Exception {
+        Lid shopLid = new Lid("195a739ab0f");
+        try {
+            Shop aistan = Shop.get(shopLid);
+            assertEquals("[SHP] Aistan @ 195a739ab0f in Ul'dah, sells for gil", aistan.toString());
+        } catch (Exception e) {
+            fail("Inappropriate parsing for " + shopLid + " because " + e.getMessage());
+        }
+    }
 }

@@ -58,6 +58,7 @@ public class Achievement {
      * @throws Exception
      */
     private Achievement(Lid lid) throws Exception {
+        this.lid = lid;
         URL url = new URL("https://na.finalfantasyxiv.com/lodestone/playguide/db/achievement/" + lid.get());
         Document doc = Jsoup.connect(url.toString()).get();
         Element e = doc.select(".db-view__achievement__text").first();
