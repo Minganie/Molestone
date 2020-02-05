@@ -114,5 +114,13 @@ public class RecipeTest {
         } catch (Exception e) {
             fail("Failed to correctly parse craft data for " + lid + " because " + e.getMessage());
         }
+        lid = new Lid("4da6d36ceba");
+        try {
+            Recipe delivery = Recipe.get(lid);
+            assertEquals("Near Eastern Antique", delivery.getName());
+            assertTrue(delivery.isAlwaysCollectible());
+        } catch (Exception e) {
+            fail("Failed to correctly parse craft data for " + lid + " because " + e.getMessage());
+        }
     }
 }
