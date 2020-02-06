@@ -4,6 +4,7 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+import util.JsoupUtils;
 import util.Lid;
 import util.LidCountBag;
 
@@ -134,6 +135,10 @@ public class Recipe {
      * Does this recipe require wearing a specific piece of equipment (ex. Ehcatl gloves)?
      */
     protected String equipment = null;
+    /**
+     * Does this always craft a collectible, whether Collector's Glove is on or not?
+     */
+    protected boolean alwaysCollectible = false;
 
     /**
      * Fetch a recipe from its Lodestone id
@@ -156,7 +161,7 @@ public class Recipe {
         } catch (NullPointerException e) { /* no mastery required */ }
         lvl = Integer.parseInt(doc.select(".db-view__item__text__level__num").first().text());
         nStars = doc.select("span.ic_star--wh15").size();
-        name = doc.select(".db-view__item__text__name").first().text();
+        name = JsoupUtils.firstNonEmptyTextNode(doc.select(".db-view__item__text__name").first());
         product = new Lid(Lid.parseLid(doc.selectFirst(".db-tooltip__bt_item_detail > a").attr("href")));
         cat = doc.select(".db-view__recipe__text__category").first().text();
         addLidCountBags(doc, "Materials");
@@ -173,6 +178,8 @@ public class Recipe {
             String t = dd.text().trim();
             if (t.contains("Quick Synthesis Craftsmanship Required"))
                 requiredCraftsmanshipForQuickSynthesis = extractInt(t);
+            else if(t.contains("Always Synthesized as Collectable"))
+                alwaysCollectible = true;
             else if(t.contains("Quick Synthesis Control Required")) // FIRST CAUSE CONTROL REQUIRED INCLUDED so not enough
                 requiredControlForQuickSynthesis = extractInt(t);
             else if(t.contains("Craftsmanship Recommended"))
@@ -496,6 +503,14 @@ public class Recipe {
      */
     public String getEquipment() {
         return equipment;
+    }
+
+    /**
+     * Getter for whether this recipe always crafts a collectible
+     * @return Does it always make a collectible?
+     */
+    public boolean isAlwaysCollectible() {
+        return alwaysCollectible;
     }
 
     /**
