@@ -4,7 +4,7 @@ import org.jsoup.nodes.Document;
 import util.Lid;
 
 /**
- * Subclass of {@link Duty} for duties that can have different difficulties, i.e. {@link Trial}, {@link Dungeon} and {@link Raid}
+ * Subclass of {@link Duty} for duties that can have different difficulties, i.e. {@link MaplessOneEncounterDuty}, {@link Dungeon} and {@link Raid}
  */
 public abstract class DifficultyDuty extends Duty {
 

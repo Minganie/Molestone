@@ -236,4 +236,14 @@ public class QuestTest {
             fail(e.getMessage());
         }
     }
+
+    @Test
+    public void testLimsaLocation() throws Exception {
+        Lid lid = new Lid("ec121f46d86");
+        try {
+            Quest onToSummerford = Quest.get(lid);
+        } catch (Exception e) {
+            fail(e.getMessage());
+        }
+    }
 }

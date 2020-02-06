@@ -5,9 +5,9 @@ import org.jsoup.nodes.Element;
 import util.Lid;
 
 /**
- * Class used to represent a Trial
+ * Class used to represent a Trial or an Ultimate Raid, i.e. a duty with only one encounter and no need for a map
  */
-public class Trial extends DifficultyDuty {
+public class MaplessOneEncounterDuty extends DifficultyDuty {
 
     /**
      * Constructor
@@ -15,12 +15,12 @@ public class Trial extends DifficultyDuty {
      * @param lid Lodestone id
      * @throws Exception for various parsing issues
      */
-    Trial(Document doc, Lid lid) throws Exception {
+    MaplessOneEncounterDuty(Document doc, Lid lid) throws Exception {
         super(doc, lid);
     }
 
     /**
-     * Trial-specific parsing name and difficulty; assigns the appropriate value to fields {@link Trial#name} and {@link Trial#difficulty}
+     * Trial-specific parsing name and difficulty; assigns the appropriate value to fields {@link MaplessOneEncounterDuty#name} and {@link MaplessOneEncounterDuty#difficulty}
      * @param nameAndDifficulty String like so "Amdapor Keep (Hard)" or "Solemn Trinity"
      */
     @Override
