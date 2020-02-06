@@ -12,7 +12,7 @@ public class DutyTest {
     public void testTrial() throws Exception {
         Lid lid = new Lid("a74020d08e8");
         try {
-            Trial dragonsNeck = (Trial) Duty.get(lid);
+            MaplessOneEncounterDuty dragonsNeck = (MaplessOneEncounterDuty) Duty.get(lid);
             assertEquals("The Dragon's Neck", dragonsNeck.getName());
             assertTrue(dragonsNeck.getBanner().contains("https://img.finalfantasyxiv.com/lds/pc/global/images/itemicon/94/94ef8852088c518f83c15cc8214c55ea49149666.png"));
             assertEquals(50, dragonsNeck.getLevel());

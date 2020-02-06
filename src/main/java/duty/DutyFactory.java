@@ -21,11 +21,13 @@ public class DutyFactory {
         if(type.equalsIgnoreCase("Guildhests"))
             return new Guildhest(doc, lid);
         if(type.equalsIgnoreCase("Trials"))
-            return new Trial(doc, lid);
+            return new MaplessOneEncounterDuty(doc, lid);
         if(type.equalsIgnoreCase("Raids"))
             return new Raid(doc, lid);
         if(type.equalsIgnoreCase("PvP"))
             return new PvP(doc, lid);
+        if(type.equalsIgnoreCase("Ultimate Raids"))
+            return new MaplessOneEncounterDuty(doc, lid);
         else throw new Exception("Can't seem to figure out which type of duty '" + type + "' is");
     }
 }
