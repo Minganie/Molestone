@@ -7,7 +7,7 @@ Get it from maven:
         <dependency>
             <groupId>com.melodysmaps</groupId>
             <artifactId>Molestone</artifactId>
-            <version>1.0</version>
+            <version>1.2</version>
         </dependency>
 ```
 
@@ -31,7 +31,7 @@ Will output:
 ```
 [RAI] The Ridorana Lighthouse (Regular) @ 390fb10fd68
 ```
-Duty is subclassed into Dungeon, Trial, Raid, Guildhest and PvP. Get methods should be fairly self-explanatory.
+Duty is subclassed into Dungeon, MaplessOneEncounterDuty (i.e. Trial or Ultimate Raid), Raid, Guildhest and PvP. Get methods should be fairly self-explanatory.
 
 # Quest
 ```java
