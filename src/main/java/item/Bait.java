@@ -1,7 +1,7 @@
 package item;
 
 import org.jsoup.nodes.Document;
-import org.jsoup.select.Elements;
+import org.jsoup.nodes.Element;
 import util.Lid;
 
 /**
@@ -14,7 +14,7 @@ public class Bait extends Item {
     }
 
     @Override
-    void parseSpecificDetails(Elements details) {
+    void parseSpecificDetails(Element details) {
         note = details.select(".db-view__help_text").text();
 //        System.out.println("Bait " + name + " has a note of " + note);
     }

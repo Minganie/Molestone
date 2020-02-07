@@ -18,7 +18,7 @@ public class Materia extends Item {
     }
 
     @Override
-    void parseSpecificDetails(Elements details) throws Exception {
+    void parseSpecificDetails(Element details) throws Exception {
         Elements bss = details.select(".basic_bonus li");
         for(Element b : bss) {
             try {

@@ -13,7 +13,9 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -190,6 +192,12 @@ public abstract class Item {
      * Can you put this item in the armoire?
      */
 	protected boolean armoireAble;
+	protected Set<Lid> shopSources = new HashSet<>();
+	protected Set<Lid> questSources = new HashSet<>();
+	protected Set<Lid> dutySources = new HashSet<>();
+	protected Set<Lid> gatheringSources = new HashSet<>();
+	protected Set<Lid> craftingSources = new HashSet<>();
+	protected Set<Lid> craftingUses = new HashSet<>();
 
     /**
      * Default constructor used by {@link Materia} in one of its constructors used by {@link ItemFactory#getHack(String, Lid, String, String, String)}
@@ -225,7 +233,7 @@ public abstract class Item {
 	    this.cat2 = cat2;
 	    this.cat3 = cat3;
 	    this.lid = lid;
-        Elements details = doc.select("div.db_cnts");
+        Element details = doc.selectFirst("div.db_cnts");
         this.name = JsoupUtils.firstNonEmptyTextNode(details.select(".db-view__item__text__name").first());
         this.licon = details.select(".db-view__item__icon__item_image").attr("src");
         this.ilvl = parseIlvl(details);
@@ -238,7 +246,7 @@ public abstract class Item {
      * @param details Div with the item details
      * @return Item level as an {@link Integer}
      */
-    private static Integer parseIlvl(Elements details) {
+    private static Integer parseIlvl(Element details) {
 	    Integer i = null;
 	    try {
             String mumbo = details.select(".db-view__item_level").text();
@@ -257,7 +265,7 @@ public abstract class Item {
      * @param details Div with the item details
      * @return Required level as an {@link Integer}
      */
-    private static Integer parseReqLvl(Elements details) {
+    private static Integer parseReqLvl(Element details) {
 	    Integer i = null;
 	    try {
 	        String mumbo = details.select(".db-view__item_equipment__level").text();
@@ -271,9 +279,9 @@ public abstract class Item {
         return i;
     }
 
-    abstract void parseSpecificDetails(Elements details) throws Exception;
+    abstract void parseSpecificDetails(Element details) throws Exception;
 	
-	private void parseCommonDetails(Elements details) throws Exception {
+	private void parseCommonDetails(Element details) throws Exception {
 	    rarity = parseRarity(details);
 		unique = !details.select("div.db-view__item__header span.rare").isEmpty();
 		untradable = !details.select("div.db-view__item__header span.ex_bind").isEmpty();
@@ -319,10 +327,71 @@ public abstract class Item {
 					span.hasClass("sys_hq_element")))
 				throw new Exception("found a new span in footer: " + span);
 		}
+		findShopSources(details);
+		findQuestSources(details);
+		findDutySources(details);
+		findGatheringSources(details);
+		findCraftingSources(details);
+		findCraftingUses(details);
 		
 	}
 
-    private static String parseRarity(Elements details) throws Exception {
+    private void findCraftingUses(Element details) throws Exception {
+        Elements trs = details.select("h3:matchesOwn(Related Crafting Log) + div.db-table__wrapper > table > tbody > tr");
+        for(Element tr : trs) {
+            Lid recipe = Lid.parseLid(tr.selectFirst("a.db_popup").attr("href"));
+            craftingUses.add(recipe);
+        }
+    }
+
+    private void findCraftingSources(Element details) throws Exception {
+        Elements trs = details.select("h3:matchesOwn(Crafting Log) + div.db-table__wrapper > table > tbody > tr");
+        for(Element tr : trs) {
+            Lid recipe = Lid.parseLid(tr.selectFirst("a.db_popup").attr("href"));
+            craftingSources.add(recipe);
+        }
+    }
+
+    private void findGatheringSources(Element details) throws Exception {
+        Elements trs = details.select("h3:matchesOwn(Gathering Log) + div.db-table__wrapper > table > tbody > tr");
+        for(Element tr : trs) {
+            Lid gathering = Lid.parseLid(tr.selectFirst("a.db_popup").attr("href"));
+            gatheringSources.add(gathering);
+        }
+    }
+
+    private void findDutySources(Element details) throws Exception {
+        Elements trs = details.select("h3:matchesOwn(Related Duties) + div.db-table__wrapper > table > tbody > tr");
+        for(Element tr : trs) {
+            Lid duty = Lid.parseLid(tr.selectFirst("a.db_popup").attr("href"));
+            dutySources.add(duty);
+        }
+    }
+
+    private void findQuestSources(Element details) throws Exception {
+        Elements trs = details.select("h3:matchesOwn(Related Quests) + div.db-table__wrapper > table > tbody > tr");
+        for(Element tr : trs) {
+            Lid quest = Lid.parseLid(tr.selectFirst("a.db_popup").attr("href"));
+            questSources.add(quest);
+        }
+    }
+
+    private void findShopSources(Element details) throws Exception {
+	    // Regular vendors
+        Elements trs = details.select(".db-shop__npc__space > table > tbody > tr");
+        for(Element tr : trs) {
+            Lid shop = Lid.parseLid(tr.selectFirst("a.db_popup").attr("href"));
+            shopSources.add(shop);
+        }
+        // Currency vendors
+        Elements divs = details.select("h3:matchesOwn(Required Items) ~ div.db-shop__item__wrapper");
+        for(Element div : divs) {
+            Lid shop = Lid.parseLid(div.selectFirst("p.db-shop__item__npc > a.db_popup").attr("href"));
+            shopSources.add(shop);
+        }
+    }
+
+    private static String parseRarity(Element details) throws Exception {
 	    String nameClass = details.select(".db-view__item__text__name").first().className();
 	    if(nameClass.contains("_uncommon"))  // LEAVE IT FIRST just in case because "uncommon" contains "common"...
 	        return "Uncommon";
@@ -350,7 +419,7 @@ public abstract class Item {
         }
     }
 
-    private void parseDetails(Elements details) throws Exception {
+    private void parseDetails(Element details) throws Exception {
 		parseCommonDetails(details);
 		parseSpecificDetails(details);
 	}
@@ -695,6 +764,42 @@ public abstract class Item {
      */
     public String getRarity() {
         return rarity;
+    }
+
+    public Boolean getConvertible() {
+        return convertible;
+    }
+
+    public Boolean getDyeable() {
+        return dyeable;
+    }
+
+    public Boolean getProjectable() {
+        return projectable;
+    }
+
+    public Set<Lid> getShopSources() {
+        return shopSources;
+    }
+
+    public Set<Lid> getQuestSources() {
+        return questSources;
+    }
+
+    public Set<Lid> getDutySources() {
+        return dutySources;
+    }
+
+    public Set<Lid> getGatheringSources() {
+        return gatheringSources;
+    }
+
+    public Set<Lid> getCraftingSources() {
+        return craftingSources;
+    }
+
+    public Set<Lid> getCraftingUses() {
+        return craftingUses;
     }
 
     /**

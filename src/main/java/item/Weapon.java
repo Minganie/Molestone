@@ -15,7 +15,7 @@ public class Weapon extends Equipable {
     }
 
     @Override
-    void parseSpecificDetails(Elements details) throws Exception {
+    void parseSpecificDetails(Element details) throws Exception {
         // SPEC
         Elements specs = details.select(".db-view__item_spec .sys_nq_element .db-view__item_spec__value");
         if (!cat3.contains("Secondary")) {

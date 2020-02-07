@@ -31,7 +31,7 @@ public class Lid {
      * @throws Exception if the string doesn't match the regex
      */
     public static Lid parseLid(String mumbo) throws Exception {
-        Pattern pattern = Pattern.compile("^/lodestone/playguide/db/.+/(.+)/(\\?hq=1)?(\\?\\d\\.\\d+)?$");
+        Pattern pattern = Pattern.compile("^/lodestone/playguide/db/.+?/(.+?)/(.+)?$");
         Matcher matcher = pattern.matcher(mumbo);
         if (matcher.find())
             return new Lid(matcher.group(1));

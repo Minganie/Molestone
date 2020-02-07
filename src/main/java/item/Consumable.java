@@ -18,7 +18,7 @@ public class Consumable extends Item {
     }
 
     @Override
-	void parseSpecificDetails(Elements details) throws Exception {
+	void parseSpecificDetails(Element details) throws Exception {
 		note = details.select(".db-view__info_text").html();
         Elements effectsEl = details.select("ul.sys_nq_element > li");
         for(Element li : effectsEl) {

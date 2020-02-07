@@ -1,6 +1,7 @@
 package item;
 
 import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import util.Lid;
 
@@ -14,7 +15,7 @@ public class Shield extends Equipable {
     }
 
     @Override
-	void parseSpecificDetails(Elements details) throws Exception {
+	void parseSpecificDetails(Element details) throws Exception {
 		// SPEC
 		Elements specs = details.select(".db-view__item_spec .sys_nq_element");
 

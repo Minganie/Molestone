@@ -20,7 +20,7 @@ public class Equipable extends Item {
     }
 
     @Override
-	void parseSpecificDetails(Elements details) throws Exception {
+	void parseSpecificDetails(Element details) throws Exception {
 		// CLASSES
 		disciplines = details.select(".db-view__item_equipment__class").html().trim();
 		
