@@ -30,11 +30,11 @@ public class Lid {
      * @return Instance of Lid
      * @throws Exception if the string doesn't match the regex
      */
-    public static String parseLid(String mumbo) throws Exception {
+    public static Lid parseLid(String mumbo) throws Exception {
         Pattern pattern = Pattern.compile("^/lodestone/playguide/db/.+/(.+)/(\\?hq=1)?(\\?\\d\\.\\d+)?$");
         Matcher matcher = pattern.matcher(mumbo);
         if (matcher.find())
-            return matcher.group(1);
+            return new Lid(matcher.group(1));
         else
             throw new Exception("Can't seem to find the lid in provided url part: " + mumbo);
     }

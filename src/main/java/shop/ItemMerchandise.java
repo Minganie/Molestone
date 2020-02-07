@@ -20,13 +20,13 @@ public class ItemMerchandise extends Merchandise {
         else
             items = new Elements(td);
         for(Element item : items) {
-            String lid = Lid.parseLid(item.select("a.db_popup").first().attr("href"));
+            Lid lid = Lid.parseLid(item.select("a.db_popup").first().attr("href"));
             int n = 1;
             try {
                 n = Integer.parseInt(item.select("span.db-view__data__number").first().html());
             } catch (NullPointerException npe) {}
             boolean q = item.select("a.db_popup").first().attr("href").contains("hq=1");
-            addItem(n, new Lid(lid), q);
+            addItem(n, lid, q);
         }
     }
 

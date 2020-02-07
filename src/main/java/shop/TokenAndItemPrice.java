@@ -21,7 +21,7 @@ public class TokenAndItemPrice extends Price {
         int nTokenLis = 0;
         for(Element li : td.select(":root > ul > li")) {
             if(isItem(li)) {
-                Lid itemLid = new Lid(Lid.parseLid(li.selectFirst("a.db_popup").attr("href")));
+                Lid itemLid = Lid.parseLid(li.selectFirst("a.db_popup").attr("href"));
                 int nItem = Integer.parseInt(li.selectFirst("span.db-view__data__number").html());
                 boolean hq = li.select("a.db_popup").first().attr("href").contains("hq=1");
                 collectability = getCollectability(li);
@@ -41,7 +41,7 @@ public class TokenAndItemPrice extends Price {
     }
     private static boolean isItem(Element li) {
         try {
-            String lid = Lid.parseLid(li.selectFirst("a.db_popup").attr("href"));
+            Lid lid = Lid.parseLid(li.selectFirst("a.db_popup").attr("href"));
             return true;
         } catch (Exception e) {
             return false;

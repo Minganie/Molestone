@@ -162,7 +162,7 @@ public class Recipe {
         lvl = Integer.parseInt(doc.select(".db-view__item__text__level__num").first().text());
         nStars = doc.select("span.ic_star--wh15").size();
         name = JsoupUtils.firstNonEmptyTextNode(doc.select(".db-view__item__text__name").first());
-        product = new Lid(Lid.parseLid(doc.selectFirst(".db-tooltip__bt_item_detail > a").attr("href")));
+        product = Lid.parseLid(doc.selectFirst(".db-tooltip__bt_item_detail > a").attr("href"));
         cat = doc.select(".db-view__recipe__text__category").first().text();
         addLidCountBags(doc, "Materials");
         addLidCountBags(doc, "Crystals");
@@ -267,7 +267,7 @@ public class Recipe {
                 throw new Exception("Unknown ingredient type? '" + h4 + "'");
         }
         for(Element el : els) {
-            Lid l = new Lid(Lid.parseLid(el.select("a.db_popup").first().attr("href")));
+            Lid l = Lid.parseLid(el.select("a.db_popup").first().attr("href"));
             int n = Integer.parseInt(el.select(".db-view__item_num").first().text());
             list.add(new LidCountBag(l, n));
         }

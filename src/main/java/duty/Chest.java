@@ -58,7 +58,7 @@ public class Chest {
         if(box != null) {
             Elements items = box.select("div.sys_treasure_box a.db_popup");
             for (Element item : items) {
-                lids.add(new Lid(Lid.parseLid(item.attr("href"))));
+                lids.add(Lid.parseLid(item.attr("href")));
             }
         }
         return lids;
