@@ -345,7 +345,7 @@ public abstract class Item {
     }
 
     private void findCraftingSources(Element details) throws Exception {
-        Elements trs = details.select("h3:matchesOwn(Crafting Log) + div.db-table__wrapper > table > tbody > tr");
+        Elements trs = details.select("h3:matchesOwn(^Crafting Log$) + div.db-table__wrapper > table > tbody > tr");
         for(Element tr : trs) {
             Lid recipe = Lid.parseLid(tr.selectFirst("a.db_popup").attr("href"));
             craftingSources.add(recipe);
@@ -387,6 +387,12 @@ public abstract class Item {
         Elements divs = details.select("h3:matchesOwn(Required Items) ~ div.db-shop__item__wrapper");
         for(Element div : divs) {
             Lid shop = Lid.parseLid(div.selectFirst("p.db-shop__item__npc > a.db_popup").attr("href"));
+            shopSources.add(shop);
+        }
+        // GC QM
+        Elements gcDivs = details.select("h3:matchesOwn(Required Company Seals and Rank) ~ div.db-shop__item__wrapper");
+        for(Element div : gcDivs ) {
+            Lid shop = Lid.parseLid(div.selectFirst("a.db_popup").attr("href"));
             shopSources.add(shop);
         }
     }
