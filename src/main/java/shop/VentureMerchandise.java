@@ -7,9 +7,17 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.text.ParseException;
 
+/**
+ * Subclass of {@link Merchandise} where the item you will get is a number of ventures for retainers
+ */
 public class VentureMerchandise extends Merchandise {
     private int n;
 
+    /**
+     * Constructor
+     * @param td Html element containing the merchandise
+     * @throws ParseException for various parsing issues
+     */
     public VentureMerchandise(Element td) throws ParseException {
         this.n = 1;
         if(td.selectFirst("span.db-view__data__number") != null) {
@@ -17,30 +25,20 @@ public class VentureMerchandise extends Merchandise {
         }
     }
 
+    /**
+     * Getter for the number of ventures
+     * @return Number of ventures
+     */
     public int getN() {
         return n;
     }
 
+    /**
+     * Utility toString method
+     * @return A pretty string like "(Vent) 3"
+     */
     @Override
     public String toString() {
         return String.format("(Vent) %d", n);
-    }
-
-    @Override
-    public void setForSave(PreparedStatement addSales) throws SQLException {
-        //good_type, venture, actionname, actionicon, actioneffect, actionduration
-        //    5         6           7           8           9           10
-        addSales.setString(5, "Venture");
-        addSales.setInt(6, n);
-        addSales.setString(7, null);
-        addSales.setString(8, null);
-        addSales.setString(9, null);
-        addSales.setInt(10, 0);
-    }
-
-    @Override
-    public void saveMerchItems(int saleId, PreparedStatement addMerchItems) throws SQLException {
-        // merchant_sale, item, hq, n
-        // no items here, do nothing
     }
 }

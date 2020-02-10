@@ -17,9 +17,4 @@ public abstract class Merchandise {
         else
             return new ItemMerchandise(el.selectFirst("td"));
     }
-
-    public abstract void setForSave(PreparedStatement addSales) throws SQLException;
-
-    public abstract void saveMerchItems(int saleId, PreparedStatement addMerchItems) throws SQLException;
-
 }

@@ -15,21 +15,52 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+/**
+ * Class to represent one shop in the game
+ */
 public class Shop {
+    /**
+     * Lodestone unique identifier of the shop
+     */
     protected Lid lid;
+    /**
+     * Name of the shop
+     */
     protected String name;
+    /**
+     * List of locations where this shop might be found
+     */
     protected List<ZonedCoords> locations = new ArrayList<>();
+    /**
+     * Tabs for gil sales
+     */
     protected Tabs gilTabs = new Tabs();
+    /**
+     * Tabs for currency (i.e. tomestones, items, etc.) sales
+     */
     protected Tabs currencyTabs = new Tabs();
+    /**
+     * Tabs for Grand Company seals sales
+     */
     protected Tabs sealsTabs = new Tabs();
+    /**
+     * Tabs for Free Company credits sales
+     */
     protected Tabs creditsTabs = new Tabs();
+    /**
+     * List of sales
+     */
     protected List<Sale> sales = new ArrayList<>();
 
-
+    /**
+     * Factory method
+     * @param lid Lodestone id
+     * @return Shop
+     * @throws Exception for various parsing issues
+     */
     public static Shop get(Lid lid) throws Exception {
         return new Shop(lid);
     }
-
 
     private Shop(Lid lid) throws Exception {
         this.lid = lid;
@@ -203,38 +234,74 @@ public class Shop {
         return mumbo;
     }
 
+    /**
+     * Getter for the Lodestone id of this shop
+     * @return Lodestone unique identifier
+     */
     public Lid getLid() {
         return lid;
     }
 
+    /**
+     * Getter for the name of this shop
+     * @return Name
+     */
     public String getName() {
         return name;
     }
 
+    /**
+     * Getter for the list of locations where this shop may be found
+     * @return List of {@link ZonedCoords}
+     */
     public List<ZonedCoords> getLocations() {
         return locations;
     }
 
+    /**
+     * Getter for the gil sales tabs
+     * @return Gil sales tabs
+     */
     public Tabs getGilTabs() {
         return gilTabs;
     }
 
+    /**
+     * Getter for the currency sales tabs
+     * @return Currency sales tabs
+     */
     public Tabs getCurrencyTabs() {
         return currencyTabs;
     }
 
+    /**
+     * Getter for the Grand Company seals sales tabs
+     * @return Grand Company seals sales tabs
+     */
     public Tabs getSealsTabs() {
         return sealsTabs;
     }
 
+    /**
+     * Getter for the Free Company credits sales tabs
+     * @return Free Company credits sales tabs
+     */
     public Tabs getCreditsTabs() {
         return creditsTabs;
     }
 
+    /**
+     * Getter for the sales
+     * @return List of sales
+     */
     public List<Sale> getSales() {
         return sales;
     }
 
+    /**
+     * Utility toString method
+     * @return A pretty string like "[SHP] Gerulf @ 0c3cddbe02f in Limsa Lominsa, sells for gil"
+     */
     @Override
     public String toString() {
         String location = locations.get(0).getZone();

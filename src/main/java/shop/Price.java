@@ -7,7 +7,16 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.text.NumberFormat;
 
+/**
+ * When seeking to complete a transaction (i.e. {@link Sale} at the shop, what payment you will provide
+ */
 public abstract class Price {
+    /**
+     * Factory method
+     * @param el Html element containing the price
+     * @return Price
+     * @throws Exception for various parsing issues
+     */
     public static Price get(Element el) throws Exception {
         if(isAFC(el)) {
             return new CreditRankPrice(el);
@@ -47,8 +56,4 @@ public abstract class Price {
     private static boolean isAFC(Element tr) {
         return tr.select(":root > td").size() == 3;
     }
-
-    public abstract void setForSave(PreparedStatement addSales) throws SQLException;
-
-    public abstract void savePriceItems(int saleId, PreparedStatement addPriceItems) throws SQLException;
 }

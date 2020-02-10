@@ -13,6 +13,9 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+/**
+ * Class for one entry in the gathering log; only botanist and miner are on the Lodestone as of 2020/02
+ */
 public class GatheredItem {
     private Lid lid;
     private String cat2;
@@ -59,44 +62,86 @@ public class GatheredItem {
         }
     }
 
+    /**
+     * Public factory method
+     * @param lid Lodestone id of the gathering log entry
+     * @return Gathering log entry
+     * @throws Exception for various parsing issues
+     */
     public static GatheredItem get(Lid lid) throws Exception {
         URL url = new URL("https://na.finalfantasyxiv.com/lodestone/playguide/db/gathering/" + lid.toString());
         Document doc = Jsoup.connect(url.toString()).get();
         return new GatheredItem(lid, doc);
     }
 
+    /**
+     * Getter for the Lodestone id of this gathering log entry
+     * @return Lodestone id for this gathering log entry
+     */
     public Lid getLid() {
         return lid;
     }
 
+    /**
+     * Getter for cat2 as per the Lodestone, i.e. Mining, Quarrying, Logging or Harvesting
+     * @return Cat2 as per the Lodestone
+     */
     public String getCat2() {
         return cat2;
     }
 
+    /**
+     * Getter for cat3 as per the Lodestone, i.e. the type of the gathered item (such as stone, bone, etc.)
+     * @return Cat3 as per the Lodestone
+     */
     public String getCat3() {
         return cat3;
     }
 
+    /**
+     * Getter for the Lodestone id of the item gathered
+     * @return Lodestone id of the item gathered
+     */
     public Lid getItem() {
         return item;
     }
 
+    /**
+     * Getter for the level of this gathering log entry
+     * @return Level of this gathering log entry
+     */
     public int getLevel() {
         return level;
     }
 
+    /**
+     * Getter for the number of stars (visible next to the level) of this gathering log entry
+     * @return Number of stars (visible next to the level) of this gathering log entry
+     */
     public int getnStars() {
         return nStars;
     }
 
+    /**
+     * Getter for whether this item will be hidden in its rocky outcrop/mature tree, etc. in the game
+     * @return Will this item be hidden?
+     */
     public boolean isHidden() {
         return hidden;
     }
 
+    /**
+     * List of {@link GatheringLocation} where one might gather this item
+     * @return List of gathering locations
+     */
     public List<GatheringLocation> getLocations() {
         return locations;
     }
 
+    /**
+     * Utility toString method
+     * @return A pretty string like "15ce02cc550 | Gathering lv.1 Copper Ore (Mining/Stone) in [Lv. 5 Hammerlea (Western Thanalan - Thanalan), Lv. 5 Spineless Basin (Central Thanalan - Thanalan)]"
+     */
     @Override
     public String toString() {
         StringBuilder stars = new StringBuilder();

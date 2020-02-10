@@ -6,7 +6,7 @@
 
     <groupId>com.melodysmaps</groupId>
     <artifactId>Molestone</artifactId>
-    <version>1.2</version>
+    <version>1.2.02-SNAPSHOT</version>
     <packaging>jar</packaging>
 
     <name>Molestone</name>

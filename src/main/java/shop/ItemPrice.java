@@ -10,9 +10,17 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Subclass of {@link Price} where you must pay with one or several items of normal or high quality
+ */
 public class ItemPrice extends Price {
     private List<LidQCountBag> items = new ArrayList<>();
 
+    /**
+     * Constructor
+     * @param td Html element containing the price
+     * @throws Exception for various parsing issues
+     */
     public ItemPrice(Element td) throws Exception {
         Elements items = td.select(":root > ul > li");
         for(Element item : items) {
@@ -30,6 +38,10 @@ public class ItemPrice extends Price {
         items.add(new LidQCountBag(lid, hq, n));
     }
 
+    /**
+     * Utility toString method
+     * @return A pretty string like "3x58af1380e89*"
+     */
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
@@ -39,29 +51,11 @@ public class ItemPrice extends Price {
         return sb.toString();
     }
 
-    @Override
-    public void setForSave(PreparedStatement addSales) throws SQLException {
-        //price_type, gil, token_name, token_n, seals, rank, gc, fcc_rank, fcc_credits
-        addSales.setString(11, "Items");
-        addSales.setInt(12, 0);
-        addSales.setString(13, null);
-        addSales.setInt(14, 0);
-        addSales.setInt(15, 0);
-        addSales.setString(16, null);
-        addSales.setString(17, null);
-        addSales.setInt(18, 0);
-        addSales.setInt(19, 0);
-    }
-
-    @Override
-    public void savePriceItems(int saleId, PreparedStatement addPriceItems) throws SQLException {
-        // merchant_sale, item, hq, n
-        addPriceItems.setInt(1, saleId);
-        for(LidQCountBag bag : items) {
-            addPriceItems.setString(2, bag.getLid().get());
-            addPriceItems.setBoolean(3, bag.isHq());
-            addPriceItems.setInt(4, bag.getN());
-            addPriceItems.execute();
-        }
+    /**
+     * Getter for the items you will get for this transaction
+     * @return List of {@link LidQCountBag} i.e. (number, quality, item's Lodestone id)
+     */
+    public List<LidQCountBag> getItems() {
+        return items;
     }
 }

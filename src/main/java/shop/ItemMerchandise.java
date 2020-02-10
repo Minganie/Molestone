@@ -10,9 +10,17 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Subclass of {@link Merchandise} where what you buy is one or several items of normal or high quality
+ */
 public class ItemMerchandise extends Merchandise {
     private List<LidQCountBag> items = new ArrayList<>();
 
+    /**
+     * Constructor
+     * @param td Html element containing the item merchandise
+     * @throws Exception for various parsing issues
+     */
     public ItemMerchandise(Element td) throws Exception {
         Elements items;
         if(hasMoreThanOne(td))
@@ -38,10 +46,18 @@ public class ItemMerchandise extends Merchandise {
         items.add(new LidQCountBag(lid, hq, n));
     }
 
+    /**
+     * Getter for the items you will get for this transaction
+     * @return List of {@link LidQCountBag} i.e. (number, quality, item's Lodestone id)
+     */
     public List<LidQCountBag> getItems() {
         return items;
     }
 
+    /**
+     * Utility toString method
+     * @return A pretty string like "3x58af1380e89*"
+     */
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
@@ -51,27 +67,5 @@ public class ItemMerchandise extends Merchandise {
         return sb.toString();
     }
 
-    @Override
-    public void setForSave(PreparedStatement addSales) throws SQLException {
-        //good_type, venture, actionname, actionicon, actioneffect, actionduration
-        //    5         6           7           8           9           10
-        addSales.setString(5, "Items");
-        addSales.setInt(6, 0);
-        addSales.setString(7, null);
-        addSales.setString(8, null);
-        addSales.setString(9, null);
-        addSales.setInt(10, 0);
-    }
 
-    @Override
-    public void saveMerchItems(int saleId, PreparedStatement addMerchItems) throws SQLException {
-        // merchant_sale, item, hq, n
-        addMerchItems.setInt(1, saleId);
-        for(LidQCountBag bag : items) {
-            addMerchItems.setString(2, bag.getLid().get());
-            addMerchItems.setBoolean(3, bag.isHq());
-            addMerchItems.setInt(4, bag.getN());
-            addMerchItems.execute();
-        }
-    }
 }

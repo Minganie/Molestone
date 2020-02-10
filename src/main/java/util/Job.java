@@ -101,6 +101,11 @@ public class Job {
         return abbrev;
     }
 
+    /**
+     * Utility equals method
+     * @param obj Other object
+     * @return Is it the same job?
+     */
     @Override
     public boolean equals(Object obj) {
         if(obj instanceof Job) {
@@ -117,6 +122,10 @@ public class Job {
             return false;
     }
 
+    /**
+     * Utility hashCode method
+     * @return hashCode
+     */
     @Override
     public int hashCode() {
         return (name != null ? name.hashCode() : super.hashCode()) + (abbrev != null ? abbrev.hashCode() : super.hashCode());

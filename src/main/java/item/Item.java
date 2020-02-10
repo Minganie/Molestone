@@ -192,11 +192,29 @@ public abstract class Item {
      * Can you put this item in the armoire?
      */
 	protected boolean armoireAble;
+    /**
+     * Set of vendors who will sell this item
+     */
 	protected Set<Lid> shopSources = new HashSet<>();
+    /**
+     * Set of quests that may award this item as a reward
+     */
 	protected Set<Lid> questSources = new HashSet<>();
+    /**
+     * Set of duties that may provide this item
+     */
 	protected Set<Lid> dutySources = new HashSet<>();
+    /**
+     * List of botanist or miner gathering log entries that provide this item
+     */
 	protected Set<Lid> gatheringSources = new HashSet<>();
+    /**
+     * List of crafting log recipes making this item
+     */
 	protected Set<Lid> craftingSources = new HashSet<>();
+    /**
+     * Lit of crafting log recipes using this item as an ingredient
+     */
 	protected Set<Lid> craftingUses = new HashSet<>();
 
     /**
@@ -772,38 +790,74 @@ public abstract class Item {
         return rarity;
     }
 
+    /**
+     * Getter for whether this item can be converted into materia
+     * @return Is it convertible into materia?
+     */
     public Boolean getConvertible() {
         return convertible;
     }
 
+    /**
+     * Getter for whether this item can be dyed
+     * @return Can it be dyed?
+     */
     public Boolean getDyeable() {
         return dyeable;
     }
 
+    /**
+     * Getter for whether this item can be projected as a glamour
+     * @return Can it be projected?
+     */
     public Boolean getProjectable() {
         return projectable;
     }
 
+    /**
+     * Getter for the vendors who will sell this item
+     * @return Set of Lodestone ids of shops
+     */
     public Set<Lid> getShopSources() {
         return shopSources;
     }
 
+    /**
+     * Getter for the quests that will award this item as a reward
+     * @return Set of Lodestone ids of quests
+     */
     public Set<Lid> getQuestSources() {
         return questSources;
     }
 
+    /**
+     * Getter for the duties that may provide this item
+     * @return Set of Lodestone ids of duties
+     */
     public Set<Lid> getDutySources() {
         return dutySources;
     }
 
+    /**
+     * Getter for the botanist or miner gathering log entries that provide this item
+     * @return Set of Lodestone ids of gathering log entries
+     */
     public Set<Lid> getGatheringSources() {
         return gatheringSources;
     }
 
+    /**
+     * Getter for the crafting recipes making this item
+     * @return Set of Lodestone ids for crafting log entries making this item
+     */
     public Set<Lid> getCraftingSources() {
         return craftingSources;
     }
 
+    /**
+     * Getter for the crafting recipes using this item as an ingredient
+     * @return Set of Lodestone ids for crafting log entries using this item
+     */
     public Set<Lid> getCraftingUses() {
         return craftingUses;
     }
