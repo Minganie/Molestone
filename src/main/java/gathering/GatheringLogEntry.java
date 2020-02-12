@@ -16,7 +16,7 @@ import java.util.regex.Pattern;
 /**
  * Class for one entry in the gathering log; only botanist and miner are on the Lodestone as of 2020/02
  */
-public class GatheredItem {
+public class GatheringLogEntry {
     private Lid lid;
     private String cat2;
     private String cat3;
@@ -26,7 +26,7 @@ public class GatheredItem {
     private boolean hidden;
     private List<GatheringLocation> locations;
 
-    private GatheredItem(Lid lid, Document doc) throws Exception {
+    private GatheringLogEntry(Lid lid, Document doc) throws Exception {
         this.lid = lid;
         cat2 = JsoupUtils.firstNonEmptyTextNode(doc.selectFirst("p.db-view__item__text__job_name"));
         cat3 = JsoupUtils.firstNonEmptyTextNode(doc.selectFirst("p.db-view__gathering__text__category"));
@@ -68,10 +68,10 @@ public class GatheredItem {
      * @return Gathering log entry
      * @throws Exception for various parsing issues
      */
-    public static GatheredItem get(Lid lid) throws Exception {
+    public static GatheringLogEntry get(Lid lid) throws Exception {
         URL url = new URL("https://na.finalfantasyxiv.com/lodestone/playguide/db/gathering/" + lid.toString());
         Document doc = Jsoup.connect(url.toString()).get();
-        return new GatheredItem(lid, doc);
+        return new GatheringLogEntry(lid, doc);
     }
 
     /**

@@ -1,6 +1,6 @@
 package test;
 
-import gathering.GatheredItem;
+import gathering.GatheringLogEntry;
 import gathering.GatheringLocation;
 import org.junit.Test;
 import util.Lid;
@@ -13,7 +13,7 @@ public class GatheringTest {
     public void notHiddenButTimeLimitedTest() throws Exception {
         Lid leekLid = new Lid("7e0a3a404f7");
         try {
-            GatheredItem leek = GatheredItem.get(leekLid);
+            GatheringLogEntry leek = GatheringLogEntry.get(leekLid);
             assertEquals(leekLid, leek.getLid());
             assertEquals("Harvesting", leek.getCat2());
             assertEquals("Ingredient", leek.getCat3());
@@ -32,7 +32,7 @@ public class GatheringTest {
     public void hiddenButNotTimeLimitedTest() throws Exception {
         Lid linseedLid = new Lid("cb721c18f59");
         try {
-            GatheredItem linseed = GatheredItem.get(linseedLid);
+            GatheringLogEntry linseed = GatheringLogEntry.get(linseedLid);
             assertTrue(linseed.isHidden());
             GatheringLocation lowerPaths = new GatheringLocation("The Black Shroud", "South Shroud", "Lower Paths", 35, false);
         } catch (Exception e) {
@@ -44,7 +44,7 @@ public class GatheringTest {
     public void severalLocationsTest() throws Exception {
         Lid CuLid = new Lid("15ce02cc550");
         try {
-            GatheredItem Cu = GatheredItem.get(CuLid);
+            GatheringLogEntry Cu = GatheringLogEntry.get(CuLid);
             assertEquals(2, Cu.getLocations().size());
             GatheringLocation spineless = new GatheringLocation("Thanalan", "Central Thanalan", "Spineless Basin", 5, false);
             GatheringLocation hammerlea = new GatheringLocation("Thanalan", "Western Thanalan", "Hammerlea", 5, false);
