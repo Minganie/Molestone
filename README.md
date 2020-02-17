@@ -7,7 +7,7 @@ Get it from maven:
         <dependency>
             <groupId>com.melodysmaps</groupId>
             <artifactId>Molestone</artifactId>
-            <version>1.2</version>
+            <version>1.3</version>
         </dependency>
 ```
 
@@ -74,5 +74,16 @@ System.out.println(s);
 Will output:
 ```
 [SHP] Gerulf @ 0c3cddbe02f in Limsa Lominsa, sells for gil
+```
+Get methods should be fairly self-explanatory.
+
+# Gathering Log
+```java
+GatheringLogEntry gle = GatheringLogEntry.get(new Lid("15ce02cc550"));
+System.out.println(gle.toString());
+```
+Will output:
+```
+15ce02cc550 | Gathering lv.1 82a24de366d (Mining/Stone) in [Lv. 5 Hammerlea (Western Thanalan - Thanalan), Lv. 5 Spineless Basin (Central Thanalan - Thanalan)]
 ```
 Get methods should be fairly self-explanatory.
