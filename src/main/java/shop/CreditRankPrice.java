@@ -7,46 +7,46 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.text.ParseException;
 
+/**
+ * Subclass of {@link Price} where a certain Free Company rank is required and the currency is Free Company Credits
+ */
 public class CreditRankPrice extends Price {
     private int rank;
     private int credits;
 
 
+    /**
+     * Constructor
+     * @param el Html element containing the price
+     * @throws ParseException for various parsing issues
+     */
     public CreditRankPrice(Element el) throws ParseException {
         rank = Integer.parseInt(el.select("td:nth-child(2)").html());
         credits = JsoupUtils.parseInt(el.select("td:nth-child(3)").html());
     }
 
+    /**
+     * Getter for the required Free Company rank
+     * @return Required Free Company rank
+     */
     public int getRank() {
         return rank;
     }
 
+    /**
+     * Getter for the number of Free Company credits
+     * @return Number of Free Company credits
+     */
     public int getCredits() {
         return credits;
     }
 
+    /**
+     * Utility toString method
+     * @return A pretty string like "(FCC) 1500 credits (rank 6)"
+     */
     @Override
     public String toString() {
         return String.format("(FCC) %d credits (rank %d)", credits, rank);
-    }
-
-    @Override
-    public void setForSave(PreparedStatement addSales) throws SQLException {
-        //price_type, gil, token_name, token_n, seals, rank, gc, fcc_rank, fcc_credits
-        addSales.setString(11, "FCC");
-        addSales.setInt(12, 0);
-        addSales.setString(13, null);
-        addSales.setInt(14, 0);
-        addSales.setInt(15, 0);
-        addSales.setString(16, null);
-        addSales.setString(17, null);
-        addSales.setInt(18, rank);
-        addSales.setInt(19, credits);
-    }
-
-    @Override
-    public void savePriceItems(int saleId, PreparedStatement addPriceItems) {
-        // merchant_sale, item, hq, n
-        // no items here, do nothing
     }
 }

@@ -181,7 +181,7 @@ public class Quest {
 
         if(!isSeasonal) {
             String npcName = doc.select("div.db-table__wrapper--npc_content a.db_popup > strong:nth-child(1)").first().text();
-            String npcLid = Lid.parseLid(doc.select("div.db-table__wrapper--npc_content a.db_popup").first().attr("href"));
+            Lid npcLid = Lid.parseLid(doc.select("div.db-table__wrapper--npc_content a.db_popup").first().attr("href"));
             Coords coords = parseCoords(doc.select(".db-view__npc__location__list > li > ul > li").first().text());
             Element areaEl = doc.select(".db-view__npc__location__list > li:nth-child(1)").first();
             area = "";
@@ -196,7 +196,7 @@ public class Quest {
                  throw new Exception("Problem parsing area name...");
             }
             area = area.trim();
-            questGiver = new NPC(npcName, new Lid(npcLid), area, coords);
+            questGiver = new NPC(npcName, npcLid, area, coords);
         }
         String jobString = doc.select("dl.db-view__data__detail_list:nth-child(1) > dd:nth-child(2)").first().text();
         if(!jobString.equals("Not specified"))
@@ -466,7 +466,7 @@ public class Quest {
 
     private void addGenderReward(Element el) throws Exception {
         try {
-            Lid rewardLid = new Lid(Lid.parseLid(el.select("a.db_popup").first().attr("href")));
+            Lid rewardLid = Lid.parseLid(el.select("a.db_popup").first().attr("href"));
             Elements wrapper = el.select(".db-view__data__reward__item__name__wrapper");
             String gender = wrapper.first().textNodes().get(0).text();
             genderRewards.get(gender).add(new LidCountBag(rewardLid, 1));
@@ -490,7 +490,7 @@ public class Quest {
         try {
             String classAbbrev;
             int n = 1;
-            Lid rewardLid = new Lid(Lid.parseLid(el.select("a.db_popup").first().attr("href")));
+            Lid rewardLid = Lid.parseLid(el.select("a.db_popup").first().attr("href"));
             Element wrapper = el.select(".db-view__data__reward__item__name__wrapper").first();
             if(wrapper.textNodes().size() == 2) {
                 classAbbrev = wrapper.textNodes().get(1).text();
@@ -506,7 +506,7 @@ public class Quest {
 
     private void addItemReward(Element el, List<LidCountBag> rewards) throws Exception {
         try {
-            Lid rewardLid = new Lid(Lid.parseLid(el.select("a.db_popup").first().attr("href")));
+            Lid rewardLid = Lid.parseLid(el.select("a.db_popup").first().attr("href"));
             Elements wrapper = el.select(".db-view__data__reward__item__name__wrapper");
             int n = findNumberIfTheresOne(wrapper);
             rewards.add(new LidCountBag(rewardLid, n));

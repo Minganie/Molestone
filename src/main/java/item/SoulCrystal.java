@@ -17,7 +17,7 @@ public class SoulCrystal extends Item {
     }
 
     @Override
-	void parseSpecificDetails(Elements details) throws Exception {
+	void parseSpecificDetails(Element details) throws Exception {
 		disciplines = details.select(".db-view__item_equipment__class").html().trim();
 
 		Elements bss = details.select(".db-view__basic_bonus li");

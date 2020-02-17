@@ -88,7 +88,7 @@ public class Achievement {
         }
         // find reward that's an item
         if(doc.select("a.db_popup").first() != null)
-            this.itemReward = new Lid(Lid.parseLid(doc.select("a.db_popup").attr("href")));
+            this.itemReward = Lid.parseLid(doc.select("a.db_popup").attr("href"));
     }
 
     /**

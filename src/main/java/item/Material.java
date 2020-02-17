@@ -34,7 +34,7 @@ public class Material extends Item {
     }
 
     @Override
-	void parseSpecificDetails(Elements details) {
+	void parseSpecificDetails(Element details) {
         Elements texts = details.select(".db-view__info_text");
 
         for(Element txtEl : texts) {

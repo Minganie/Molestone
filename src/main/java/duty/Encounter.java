@@ -62,8 +62,8 @@ public class Encounter {
         if(encounterBox != null) {
             Elements rewards = encounterBox.select(".db-view__data__reward__item a.db_popup");
             for (Element reward : rewards) {
-                String lid = Lid.parseLid(reward.attr("href"));
-                loot.add(new Lid(lid));
+                Lid lid = Lid.parseLid(reward.attr("href"));
+                loot.add(lid);
             }
         }
     }
@@ -94,8 +94,8 @@ public class Encounter {
             Elements bosses = encounterBox.select("ul.db-view__data__boss_list li");
             for (Element boss : bosses) {
                 String bossName = boss.text();
-                String bossLid = Lid.parseLid(boss.select("a").attr("href"));
-                bossList.add(new NPC(bossName, new Lid(bossLid)));
+                Lid bossLid = Lid.parseLid(boss.select("a").attr("href"));
+                bossList.add(new NPC(bossName, bossLid));
             }
         }
     }

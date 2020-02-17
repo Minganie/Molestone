@@ -7,48 +7,47 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.text.ParseException;
 
+/**
+ * Subclass of {@link Price} where the payment will be some type of token, i.e. scips, tomestones, etc.
+ */
 public class TokenPrice extends Price {
     private int n;
     private String token;
 
-
+    /**
+     * Constructor
+     * @param td Html element containing the price
+     * @throws ParseException for various parsing issues
+     */
     public TokenPrice(Element td) throws ParseException {
         token = td.selectFirst("h4").html().trim();
         String nString = td.selectFirst("span.db-view__data__number").html().trim();
         n = JsoupUtils.parseInt(nString);
     }
 
+    /**
+     * Getter for the number of tokens
+     * @return Number of tokens
+     */
     public int getN() {
         return n;
     }
 
+    /**
+     * Getter for the name of the token
+     * @return Name of the token
+     */
     public String getToken() {
         return token;
     }
 
+    /**
+     * Utility toString method
+     * @return A pretty String like "(Tok) 325 Yellow Gatherers' Scrip"
+     */
     @Override
     public String toString() {
         return String.format("(Tok) %d %s", n, token);
     }
 
-    @Override
-    public void setForSave(PreparedStatement addSales) throws SQLException {
-
-        //price_type, gil, token_name, token_n, seals, rank, gc, fcc_rank, fcc_credits
-        addSales.setString(11, "Tokens");
-        addSales.setInt(12, 0);
-        addSales.setString(13, token);
-        addSales.setInt(14, n);
-        addSales.setInt(15, 0);
-        addSales.setString(16, null);
-        addSales.setString(17, null);
-        addSales.setInt(18, 0);
-        addSales.setInt(19, 0);
-    }
-
-    @Override
-    public void savePriceItems(int saleId, PreparedStatement addPriceItems) throws SQLException {
-        // merchant_sale, item, hq, n
-        // no items here, do nothing
-    }
 }

@@ -16,7 +16,7 @@ public class Seafood extends Material {
 
 
     @Override
-    void parseSpecificDetails(Elements details) {
+    void parseSpecificDetails(Element details) {
 //        Elements info = details.select(".div.db-view__info_text:nth-child(2)");
 //        if(!info.isEmpty()) {
 //            for (Element li : info) {

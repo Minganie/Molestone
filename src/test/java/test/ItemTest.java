@@ -142,4 +142,86 @@ public class ItemTest {
             fail("Failed to get proper name for " + lid + " because " + e.getMessage());
         }
     }
+
+    @Test
+    public void testShopSources() throws Exception {
+        Lid lid = new Lid("ba7b835e608");
+        try {
+            // regular vendors
+            Item bronzeIngot = Item.get(lid);
+            assertEquals(11, bronzeIngot.getShopSources().size());
+            // wolf vendor
+            lid = new Lid("dd88a93ac50");
+            Item pvpWeapon = Item.get(lid);
+            assertEquals(1, pvpWeapon.getShopSources().size());
+            assertTrue(pvpWeapon.getShopSources().contains(new Lid("7dcfaaaf669")));
+            // scrip vendor
+            lid = new Lid("32b7f5e00dc");
+            Item scripMainHand = Item.get(lid);
+            assertEquals(9, scripMainHand.getShopSources().size());
+            // GC QM
+            lid = new Lid("8b84874781f");
+            Item sword = Item.get(lid);
+            assertEquals(1, sword.getShopSources().size());
+            assertTrue(sword.getShopSources().contains(new Lid("5bb28b3316b")));
+            // poetics
+            lid = new Lid("c4e26dc27d0");
+            Item magitekSword = Item.get(lid);
+            assertEquals(4, magitekSword.getShopSources().size());
+            // regular + amaljaa, amaljaa is there twice...
+            lid = new Lid("a31d0a708d9");
+            Item ironIngot = Item.get(lid);
+            assertEquals(5, ironIngot.getShopSources().size());
+        } catch (Exception e) {
+            fail("Failed to get regular shops for " + lid + " because " + e.getMessage());
+        }
+    }
+
+    @Test
+    public void testDutySources() throws Exception {
+        Lid lid = new Lid("94b07877d6d");
+        try {
+            Item item = Item.get(lid);
+            assertEquals(2, item.getDutySources().size());
+        } catch (Exception e) {
+            fail("Failed to get duties for " + lid + " because " + e.getMessage());
+        }
+    }
+
+    @Test
+    public void testQuestSources() throws Exception {
+        Lid lid = new Lid("82a24de366d");
+        try {
+            Item item = Item.get(lid);
+            assertEquals(3, item.getQuestSources().size());
+        } catch (Exception e) {
+            fail("Failed to get quests for " + lid + " because " + e.getMessage());
+        }
+    }
+
+    @Test
+    public void testGatheringSources() throws Exception {
+        Lid lid = new Lid("82a24de366d");
+        try {
+            Item item = Item.get(lid);
+            assertEquals(1, item.getGatheringSources().size());
+            assertTrue(item.getGatheringSources().contains(new Lid("15ce02cc550")));
+        } catch (Exception e) {
+            fail("Failed to get gathering sources for " + lid + " because " + e.getMessage());
+        }
+    }
+
+    @Test
+    public void testCrafting() throws Exception {
+        Lid lid = new Lid("ba7b835e608");
+        try {
+            Item item = Item.get(lid);
+            // source
+            assertEquals(2, item.getCraftingSources().size());
+            // uses
+            assertEquals(81, item.getCraftingUses().size());
+        } catch (Exception e) {
+            fail("Failed to get crafting sources or uses for " + lid + " because " + e.getMessage());
+        }
+    }
 }

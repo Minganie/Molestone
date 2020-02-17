@@ -9,6 +9,9 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.text.ParseException;
 
+/**
+ * Subclass of {@link Price} where the payment will be an item and a number of Allagan tomestones
+ */
 public class TokenAndItemPrice extends Price {
     private LidQCountBag item;
     private int collectability;
@@ -16,12 +19,17 @@ public class TokenAndItemPrice extends Price {
     private String tokenName;
     private int nTokens;
 
+    /**
+     * Constructor
+     * @param td Html element containing the price
+     * @throws Exception for various parsing issues
+     */
     public TokenAndItemPrice(Element td) throws Exception {
         int nItemLis = 0;
         int nTokenLis = 0;
         for(Element li : td.select(":root > ul > li")) {
             if(isItem(li)) {
-                Lid itemLid = new Lid(Lid.parseLid(li.selectFirst("a.db_popup").attr("href")));
+                Lid itemLid = Lid.parseLid(li.selectFirst("a.db_popup").attr("href"));
                 int nItem = Integer.parseInt(li.selectFirst("span.db-view__data__number").html());
                 boolean hq = li.select("a.db_popup").first().attr("href").contains("hq=1");
                 collectability = getCollectability(li);
@@ -39,9 +47,10 @@ public class TokenAndItemPrice extends Price {
         if(nTokenLis != 1)
             throw new Exception("Not exactly one token li in token and item price?");
     }
+
     private static boolean isItem(Element li) {
         try {
-            String lid = Lid.parseLid(li.selectFirst("a.db_popup").attr("href"));
+            Lid lid = Lid.parseLid(li.selectFirst("a.db_popup").attr("href"));
             return true;
         } catch (Exception e) {
             return false;
@@ -60,57 +69,60 @@ public class TokenAndItemPrice extends Price {
         return n;
     }
 
+    /**
+     * Getter for the item's Lodestone id
+     * @return Lodestone id of the item
+     */
     public Lid getItemLid() {
         return item.getLid();
     }
 
+    /**
+     * Getter for the number of items
+     * @return Number of items
+     */
     public int getnItem() {
         return item.getN();
     }
 
+    /**
+     * Getter for the item's quality
+     * @return Is it a high quality item?
+     */
     public boolean isItemHq() {
         return item.isHq();
     }
 
+    /**
+     * Getter for whether the item is collectable
+     * @return Is it collectable?
+     */
     public int getItemCollectability() {
         return collectability;
     }
 
+    /**
+     * Getter for the name of the token, i.e. Allagan Tomestones of Poetics
+     * @return Name of the token
+     */
     public String getTokenName() {
         return tokenName;
     }
 
+    /**
+     * Getter for the number of tokens
+     * @return Number of tokens
+     */
     public int getnTokens() {
         return nTokens;
     }
 
+    /**
+     * Utility toString method
+     * @return A pretty string like "(Tok + Item) 325 Yellow Crafter's Scrips + 1 15ef9749703"
+     */
     @Override
     public String toString() {
         return String.format("(Tok + Item) %d %s + %d %s", nTokens, tokenName, item.getN(), item.getLid());
-    }
-
-    @Override
-    public void setForSave(PreparedStatement addSales) throws SQLException {
-
-        //price_type, gil, token_name, token_n, seals, rank, gc, fcc_rank, fcc_credits
-        addSales.setString(11, "Tokens and Items");
-        addSales.setInt(12, 0);
-        addSales.setString(13, tokenName);
-        addSales.setInt(14, nTokens);
-        addSales.setInt(15, 0);
-        addSales.setString(16, null);
-        addSales.setString(17, null);
-        addSales.setInt(18, 0);
-        addSales.setInt(19, 0);
-    }
-
-    @Override
-    public void savePriceItems(int saleId, PreparedStatement addPriceItems) throws SQLException {
-        // merchant_sale, item, hq, n
-        addPriceItems.setInt(1, saleId);
-        addPriceItems.setString(2, item.getLid().get());
-        addPriceItems.setBoolean(3, item.isHq());
-        addPriceItems.setInt(4, item.getN());
-        addPriceItems.execute();
     }
 }
