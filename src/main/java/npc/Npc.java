@@ -11,6 +11,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public abstract class Npc {
+    public static final String ENEMY = "Enemies";
+    public static final String NPC = "NPC";
     protected String cat;
     protected Lid lid;
     protected String name;

@@ -178,6 +178,25 @@ public class ItemTest {
     }
 
     @Test
+    public void testEnemySources() throws Exception {
+        Lid lid = new Lid("3662944738e");
+        try {
+            Item tin = Item.get(lid);
+            assertEquals(4, tin.getEnemySources().size());
+            Lid silverCoblyn = new Lid("5a9b3e1dd73");
+            Lid copperCoblyn = new Lid("10387fe4a87");
+            Lid prismCoblyn = new Lid("d8da4653fc0");
+            Lid rustyCoblyn = new Lid("0949d366cab");
+            assertTrue(tin.getEnemySources().contains(silverCoblyn));
+            assertTrue(tin.getEnemySources().contains(copperCoblyn));
+            assertTrue(tin.getEnemySources().contains(prismCoblyn));
+            assertTrue(tin.getEnemySources().contains(rustyCoblyn));
+        } catch (Exception e) {
+            fail(e.getMessage());
+        }
+    }
+
+    @Test
     public void testDutySources() throws Exception {
         Lid lid = new Lid("94b07877d6d");
         try {

@@ -30,7 +30,7 @@ public class AchievementTest {
         Lid lid = new Lid("de887cf928b");
         try {
             Achievement a = Achievement.get(lid);
-            assertEquals("Crafting", a.getCategory2());
+            assertEquals("Crafting & Gathering", a.getCategory2());
             assertEquals("Carpenter", a.getCategory3());
             assertEquals("Going with the Grain: Artisan", a.getTitle());
             assertEquals(10, a.getPoints());
