@@ -25,11 +25,15 @@ public class Enemy extends Npc {
         }
 
         h3 = doc.selectFirst("h3:matchesOwn(Related Duties)");
-        Elements relDuties = h3.parent().parent().select("table.db-table > tbody > tr > td:first-child a.db_popup");
-        for(Element relDuty : relDuties) {
-            relatedDuties.add(Lid.parseLid(relDuty.attr("href")));
+        if(h3 != null) {
+            Elements relDuties = h3.parent().parent().select("table.db-table > tbody > tr > td:first-child a.db_popup");
+            for (Element relDuty : relDuties) {
+                relatedDuties.add(Lid.parseLid(relDuty.attr("href")));
+            }
         }
 
-        conditionalSpawner = (doc.selectFirst("span.db-view__npc__header_text:matchesOwn(Spawn Location)").parent().select("tr p:matchesOwn(Will only appear under)").size() > 0);
+        Element tr = doc.selectFirst("tr:matches(Spawn Location)");
+        Elements trs = doc.select("tr:matches(Spawn Location) + tr p:matchesOwn(Will only appear under)");
+        conditionalSpawner = (doc.select("tr:matches(Spawn Location) + tr p:matchesOwn(Will only appear under)").size() > 0);
     }
 }

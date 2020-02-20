@@ -17,17 +17,23 @@ public class SpawnLocation {
         String mumbo = JsoupUtils.firstNonEmptyTextNode(el);
         Pattern pattern = Pattern.compile("^(.+)\\sLv\\.\\s(\\d+)(?:\\-(\\d+))?$");
         Matcher matcher = pattern.matcher(mumbo);
-        if(matcher.find() && matcher.groupCount() == 2) {
-            location = matcher.group(1);
-            minLevel = JsoupUtils.parseInt(matcher.group(2));
-            maxLevel = minLevel;
-        } else if(matcher.find() && matcher.groupCount() == 3) {
-            location = matcher.group(1);
-            minLevel = JsoupUtils.parseInt(matcher.group(2));
-            maxLevel = JsoupUtils.parseInt(matcher.group(3));
+        String tmpLocation = null;
+        String tmpMinLvl = null;
+        String tmpMaxLvl = null;
+        if(matcher.find()) {
+            tmpLocation = matcher.group(1);
+            tmpMinLvl = matcher.group(2);
+            tmpMaxLvl = matcher.group(3);
         } else {
             throw new ParseException("Can't figure out spawn location from '" + mumbo + "'", 0);
         }
+
+        location = tmpLocation;
+        minLevel = JsoupUtils.parseInt(tmpMinLvl);
+        if(tmpMaxLvl == null)
+            maxLevel = minLevel;
+        else
+            maxLevel = JsoupUtils.parseInt(tmpMaxLvl);
     }
 
     public SpawnLocation(String location, int minLevel, int maxLevel) {
@@ -52,7 +58,7 @@ public class SpawnLocation {
     public boolean equals(Object o) {
         if(o instanceof SpawnLocation) {
             SpawnLocation other = (SpawnLocation) o;
-            return this.location == other.location
+            return this.location.equals(other.location)
                     && this.minLevel == other.minLevel
                     && this.maxLevel == other.maxLevel;
         } else
