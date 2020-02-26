@@ -12,6 +12,7 @@ public class SpawnLocation {
     private String location;
     private int minLevel;
     private int maxLevel;
+    private boolean conditional;
 
     public SpawnLocation(Element el) throws ParseException {
         String mumbo = JsoupUtils.firstNonEmptyTextNode(el);
@@ -34,12 +35,15 @@ public class SpawnLocation {
             maxLevel = minLevel;
         else
             maxLevel = JsoupUtils.parseInt(tmpMaxLvl);
+
+        conditional = (el.selectFirst("p:matchesOwn(certain circumstances)") != null);
     }
 
-    public SpawnLocation(String location, int minLevel, int maxLevel) {
+    public SpawnLocation(String location, int minLevel, int maxLevel, boolean conditional) {
         this.location = location;
         this.minLevel = minLevel;
         this.maxLevel = maxLevel;
+        this.conditional = conditional;
     }
 
     public String getLocation() {
@@ -54,24 +58,29 @@ public class SpawnLocation {
         return maxLevel;
     }
 
+    public boolean isConditional() {
+        return conditional;
+    }
+
     @Override
     public boolean equals(Object o) {
         if(o instanceof SpawnLocation) {
             SpawnLocation other = (SpawnLocation) o;
             return this.location.equals(other.location)
                     && this.minLevel == other.minLevel
-                    && this.maxLevel == other.maxLevel;
+                    && this.maxLevel == other.maxLevel
+                    && this.conditional == other.conditional;
         } else
             return false;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(location, minLevel, maxLevel);
+        return Objects.hash(location, minLevel, maxLevel, conditional);
     }
 
     @Override
     public String toString() {
-        return location + " Lv. " + (minLevel == maxLevel ? minLevel : minLevel + "-" + maxLevel);
+        return location + " Lv. " + (minLevel == maxLevel ? minLevel : minLevel + "-" + maxLevel + (conditional ? "*" : ""));
     }
 }

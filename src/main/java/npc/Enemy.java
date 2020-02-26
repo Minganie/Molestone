@@ -1,17 +1,38 @@
 package npc;
 
+import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+import util.JsoupUtils;
 import util.Lid;
 
-public class Enemy extends Npc {
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 
-    protected Enemy(String cat, Lid lid) throws Exception {
-        super(cat, lid);
+public class Enemy {
+    protected Lid lid;
+    protected String name;
+    protected List<SpawnLocation> spawnLocations = new ArrayList<>();
+    protected List<Lid> droppedItems = new ArrayList<>();
+    protected List<Lid> relatedDuties = new ArrayList<>();
+
+    private static String urlPart = "enemy";
+
+    private Enemy(Lid lid, Document doc) throws Exception {
+        this.lid = lid;
+        this.name = JsoupUtils.firstNonEmptyTextNode(doc.selectFirst(".db-view__detail__npc_name"));
+        parseDetails(doc);
+
     }
 
-    @Override
+    public static Enemy get(Lid lid) throws Exception {
+        URL url = new URL("https://na.finalfantasyxiv.com/lodestone/playguide/db/npc/" + urlPart + "/" + lid.toString());
+        Document doc = Jsoup.connect(url.toString()).get();
+        return new Enemy(lid, doc);
+    }
+
     void parseDetails(Document doc) throws Exception {
         Elements els = doc.select("tr:matches(^Spawn Location) + tr > td > ul > li");
         for(Element el : els) {
@@ -31,9 +52,25 @@ public class Enemy extends Npc {
                 relatedDuties.add(Lid.parseLid(relDuty.attr("href")));
             }
         }
+    }
 
-        Element tr = doc.selectFirst("tr:matches(Spawn Location)");
-        Elements trs = doc.select("tr:matches(Spawn Location) + tr p:matchesOwn(Will only appear under)");
-        conditionalSpawner = (doc.select("tr:matches(Spawn Location) + tr p:matchesOwn(Will only appear under)").size() > 0);
+    public Lid getLid() {
+        return lid;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public List<SpawnLocation> getSpawnLocations() {
+        return spawnLocations;
+    }
+
+    public List<Lid> getDroppedItems() {
+        return droppedItems;
+    }
+
+    public List<Lid> getRelatedDuties() {
+        return relatedDuties;
     }
 }

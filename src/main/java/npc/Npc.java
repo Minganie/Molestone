@@ -2,6 +2,9 @@ package npc;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
+import util.Coords;
 import util.JsoupUtils;
 import util.Lid;
 import util.ZonedCoords;
@@ -10,52 +13,42 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class Npc {
-    public static final String ENEMY = "Enemies";
-    public static final String NPC = "NPC";
-    protected String cat;
+public class Npc {
     protected Lid lid;
     protected String name;
-
-    // Enemy
-    protected List<SpawnLocation> spawnLocations = new ArrayList<>();
-    protected List<Lid> droppedItems = new ArrayList<>();
-    protected boolean conditionalSpawner = false;
-    protected List<Lid> relatedDuties = new ArrayList<>();
-
-    // NPC
     protected ZonedCoords location = null;
     protected List<Lid> availableQuests = new ArrayList<>();
     protected List<Lid> relatedQuests = new ArrayList<>();
 
-    protected Npc(String cat, Lid lid) throws Exception {
-        this.cat = cat;
+    private static String urlPart = "npc";
+
+    private Npc(Lid lid, Document doc) throws Exception {
         this.lid = lid;
-        String urlPart;
-        if(cat.equals("Enemies"))
-            urlPart = "enemy";
-        else if(cat.contains("NPC"))
-            urlPart = "npc";
-        else
-            throw new Exception("Can't figure out npc type from '" + cat + "'");
-        URL url = new URL("https://na.finalfantasyxiv.com/lodestone/playguide/db/npc/" + urlPart + "/" + lid.toString());
-        Document doc = Jsoup.connect(url.toString()).get();
         name = JsoupUtils.firstNonEmptyTextNode(doc.selectFirst(".db-view__detail__npc_name"));
         parseDetails(doc);
     }
 
-    public static Npc get(String cat, Lid lid) throws Exception {
-        if(cat.equals("Enemies"))
-            return new Enemy(cat, lid);
-        if(cat.contains("NPC"))
-            return new NpcNpc(cat, lid);
-        throw new Exception("Unable to figure out subtype of npc from '" + cat + "'");
+    public static Npc get(Lid lid) throws Exception {
+        URL url = new URL("https://na.finalfantasyxiv.com/lodestone/playguide/db/npc/" + urlPart + "/" + lid.toString());
+        Document doc = Jsoup.connect(url.toString()).get();
+        return new Npc(lid, doc);
     }
 
-    abstract void parseDetails(Document doc) throws Exception;
+    void parseDetails(Document doc) throws Exception {
+        Element loc = doc.selectFirst("tr:matches(^Location$) + tr");
+        String z = JsoupUtils.firstNonEmptyTextNode(loc.selectFirst("td > ul > li"));
+        String c = JsoupUtils.firstNonEmptyTextNode(loc.selectFirst("td > ul > li > ul > li"));
+        location = new ZonedCoords(Coords.parseCoords(c), z);
 
-    public String getCat() {
-        return cat;
+        Elements avQuests = doc.select("table:matches(^Available Quests$) + table > tbody > tr a.db_popup");
+        for(Element avQuest : avQuests) {
+            availableQuests.add(Lid.parseLid(avQuest.attr("href")));
+        }
+
+        Elements relQuests = doc.select("table:matches(^Related Quests$) + table > tbody > tr a.db_popup");
+        for(Element relQuest : relQuests) {
+            relatedQuests.add(Lid.parseLid(relQuest.attr("href")));
+        }
     }
 
     public Lid getLid() {
@@ -64,22 +57,6 @@ public abstract class Npc {
 
     public String getName() {
         return name;
-    }
-
-    public List<SpawnLocation> getSpawnLocations() {
-        return spawnLocations;
-    }
-
-    public List<Lid> getDroppedItems() {
-        return droppedItems;
-    }
-
-    public boolean isConditionalSpawner() {
-        return conditionalSpawner;
-    }
-
-    public List<Lid> getRelatedDuties() {
-        return relatedDuties;
     }
 
     public ZonedCoords getLocation() {
@@ -92,10 +69,5 @@ public abstract class Npc {
 
     public List<Lid> getRelatedQuests() {
         return relatedQuests;
-    }
-
-    @Override
-    public String toString() {
-        return name + " @ " + lid + " (" + cat + ")";
     }
 }
