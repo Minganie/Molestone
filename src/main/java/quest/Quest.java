@@ -3,7 +3,6 @@ package quest;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
-import org.jsoup.nodes.Node;
 import org.jsoup.nodes.TextNode;
 import org.jsoup.select.Elements;
 import util.*;
@@ -12,8 +11,6 @@ import java.net.URL;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import static util.Coords.parseCoords;
 
 /**
  * A single quest in the game.
@@ -41,10 +38,6 @@ public class Quest {
      */
     protected String type;
     /**
-     * Area where the quest giver is located
-     */
-    protected String area = null;
-    /**
      * Quest level
      */
     protected int level;
@@ -59,7 +52,7 @@ public class Quest {
     /**
      * NPC you talk to to start the quest
      */
-    protected NPC questGiver;
+    protected Lid questGiver;
     /**
      * Class required to start the quest (from my understanding, only relevant for game-starting quests)
      */
@@ -180,23 +173,7 @@ public class Quest {
         isSeasonal = (season != null && season.first() != null);
 
         if(!isSeasonal) {
-            String npcName = doc.select("div.db-table__wrapper--npc_content a.db_popup > strong:nth-child(1)").first().text();
-            Lid npcLid = Lid.parseLid(doc.select("div.db-table__wrapper--npc_content a.db_popup").first().attr("href"));
-            Coords coords = parseCoords(doc.select(".db-view__npc__location__list > li > ul > li").first().text());
-            Element areaEl = doc.select(".db-view__npc__location__list > li:nth-child(1)").first();
-            area = "";
-            for(Node n : areaEl.childNodes()) {
-                if(n.nodeName().equals("#text"))
-                    area += n.toString();
-                else if (n.nodeName().equals("i"))
-                    area += ((Element) n).text();
-                else if (n.nodeName().equals("ul"))
-                    break;
-                else
-                 throw new Exception("Problem parsing area name...");
-            }
-            area = area.trim();
-            questGiver = new NPC(npcName, npcLid, area, coords);
+            questGiver = Lid.parseLid(doc.select("div.db-table__wrapper--npc_content a.db_popup").first().attr("href"));
         }
         String jobString = doc.select("dl.db-view__data__detail_list:nth-child(1) > dd:nth-child(2)").first().text();
         if(!jobString.equals("Not specified"))
@@ -256,7 +233,7 @@ public class Quest {
      * @return A string like so "A Fiendish Likeness @40020a8a0b5 in The Rising Stones (lvl 60) [Heavensward Primal Quests]"
      */
     public String toString() {
-        return title + " @" + lid.toString() + " in " + area + " (lvl " + level + ") [" + category + "]";
+        return title + " @" + lid.toString() + " (lvl " + level + ") [" + category + "]";
     }
 
     /**
@@ -283,9 +260,9 @@ public class Quest {
         actualCompletionRewards.append("]");
 
         System.out.println("QUEST " + title + " @ " + lid);
-        System.out.println("\t" + category + " in " + area + " (lvl " + level + ")");
+        System.out.println("\t" + category + " (lvl " + level + ")");
         System.out.println("\tBanner: " + bannerUrl);
-        System.out.println("\tBy: " + (questGiver != null ? questGiver.getName() : "Unavailable") + " for " + startingClass);
+        System.out.println("\tBy: " + (questGiver != null ? questGiver.get() : "Unavailable") + " for " + startingClass);
         System.out.println("\tMust be: " + classRequirement + " (lvl " + levelRequirement + ")");
         System.out.println("\tGC limited to: " + grandCompanyRank + " in " + grandCompany);
         System.out.println("\tDuty limited to: " + requiredDuties.toString());
@@ -556,14 +533,6 @@ public class Quest {
     }
 
     /**
-     * Getter for the area where you can pick up the quest
-     * @return Area where you can pick up the quest
-     */
-    public String getArea() {
-        return area;
-    }
-
-    /**
      * Getter for the quest level
      * @return Quest level
      */
@@ -588,10 +557,10 @@ public class Quest {
     }
 
     /**
-     * Getter for the {@link NPC} granting this quest
+     * Getter for the {@link Lid} granting this quest
      * @return NPC granting this quest
      */
-    public NPC getQuestGiver() {
+    public Lid getQuestGiver() {
         return questGiver;
     }
 

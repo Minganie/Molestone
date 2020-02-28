@@ -156,9 +156,9 @@ public abstract class Item {
      */
 	protected Integer meldingLevel = null;
     /**
-     * Can this item be converted to materia?
+     * Can materia be extracted from this item?
      */
-	protected Boolean convertible = null;
+	protected Boolean extractable = null;
     /**
      * If desynthesizable, discipline of the Hand class required to desynthesize
      */
@@ -196,6 +196,10 @@ public abstract class Item {
      * Set of vendors who will sell this item
      */
 	protected Set<Lid> shopSources = new HashSet<>();
+    /**
+     * Set of enemies that may drop this item when killed
+     */
+    protected Set<Lid> enemySources = new HashSet<>();
     /**
      * Set of quests that may award this item as a reward
      */
@@ -346,13 +350,21 @@ public abstract class Item {
 				throw new Exception("found a new span in footer: " + span);
 		}
 		findShopSources(details);
+		findEnemySources(details);
 		findQuestSources(details);
 		findDutySources(details);
 		findGatheringSources(details);
 		findCraftingSources(details);
 		findCraftingUses(details);
-		
 	}
+
+    private void findEnemySources(Element details) throws Exception {
+        Elements trs = details.select("h3:matchesOwn(^Dropped By$) + div.db-table__wrapper > table > tbody > tr");
+        for(Element tr : trs) {
+            Lid enemy = Lid.parseLid(tr.selectFirst("a.db_popup").attr("href"));
+            enemySources.add(enemy);
+        }
+    }
 
     private void findCraftingUses(Element details) throws Exception {
         Elements trs = details.select("h3:matchesOwn(Related Crafting Log) + div.db-table__wrapper > table > tbody > tr");
@@ -701,7 +713,7 @@ public abstract class Item {
      * @return Is it convertible to materia?
      */
     public Boolean isConvertible() {
-        return convertible;
+        return extractable;
     }
 
     /**
@@ -794,8 +806,8 @@ public abstract class Item {
      * Getter for whether this item can be converted into materia
      * @return Is it convertible into materia?
      */
-    public Boolean getConvertible() {
-        return convertible;
+    public Boolean getExtractable() {
+        return extractable;
     }
 
     /**
@@ -820,6 +832,14 @@ public abstract class Item {
      */
     public Set<Lid> getShopSources() {
         return shopSources;
+    }
+
+    /**
+     * Getter for the enemies that may drop this item
+     * @return Set of Lodestone ids of enemies
+     */
+    public Set<Lid> getEnemySources() {
+        return enemySources;
     }
 
     /**

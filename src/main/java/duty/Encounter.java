@@ -3,10 +3,12 @@ package duty;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import util.Lid;
-import util.NPC;
 
 import java.text.ParseException;
-import java.util.*;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * One boss encounter
@@ -16,7 +18,7 @@ public class Encounter {
      * Set of boss names for this encounter (ex. "Diabolos" or "Annia Quo Soranus and Julia Quo Soranus");
      * it's a set because some "gauntlet" type encounters use the same mob twice
      */
-    protected Set<NPC> bossList = new HashSet<>();
+    protected Set<Lid> bossList = new HashSet<>();
     /**
      * Combinations of (token, number) awarded for this encounter
      */
@@ -93,9 +95,7 @@ public class Encounter {
         if(encounterBox != null) {
             Elements bosses = encounterBox.select("ul.db-view__data__boss_list li");
             for (Element boss : bosses) {
-                String bossName = boss.text();
-                Lid bossLid = Lid.parseLid(boss.select("a").attr("href"));
-                bossList.add(new NPC(bossName, bossLid));
+                bossList.add(Lid.parseLid(boss.select("a").attr("href")));
             }
         }
     }
@@ -126,9 +126,9 @@ public class Encounter {
 
     /**
      * Getter for the list of mobs fighting in this encounter
-     * @return Set of {@link NPC} fighting in this encounter
+     * @return Set of {@link Lid} fighting in this encounter
      */
-    public Set<NPC> getBossList() {
+    public Set<Lid> getBossList() {
         return bossList;
     }
 
@@ -172,8 +172,8 @@ public class Encounter {
     public String getBossNames() {
         StringBuilder b = new StringBuilder();
         if(bossList.size() > 0) {
-            for(NPC boss : bossList) {
-                b.append(boss.getName() + ", ");
+            for(Lid boss : bossList) {
+                b.append(boss.get() + ", ");
             }
             b.delete(b.length()-2, b.length());
         }

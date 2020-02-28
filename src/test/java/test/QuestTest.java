@@ -20,10 +20,9 @@ public class QuestTest {
         Lid lid = new Lid("d97e230e9bd");
         try {
             Quest skeletons = Quest.get(lid);
-            NPC ursandel = new NPC("Ursandel", new Lid("a6d157b4f1b"), "Old Gridania", new Coords(11.9, 4.5));
+            Lid ursandel = new Lid("a6d157b4f1b");
             assertEquals("Seventh Umbral Era", skeletons.getCategory());
             assertEquals("Skeletons in Her Closet", skeletons.getTitle());
-            assertEquals("Old Gridania", skeletons.getArea());
             assertEquals(28, skeletons.getLevel());
             assertEquals("d97e230e9bd", skeletons.getLid().toString());
             assertTrue(skeletons.getBannerUrl().contains("https://img.finalfantasyxiv.com/lds/pc/global/images/itemicon/ac/ac35585945b4d5ad9861251c4a2123fc690b1604.png?"));

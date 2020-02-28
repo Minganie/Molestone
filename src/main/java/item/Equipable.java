@@ -3,10 +3,8 @@ package item;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
-import util.Job;
 import util.Lid;
 
-import java.util.Arrays;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -75,8 +73,8 @@ public class Equipable extends Item {
 		if(!info.isEmpty()) {
 		    for(Element li : info) {
 		        String s = li.html();
-		        if(s.contains("Convertible"))
-                    convertible = s.contains("Yes");
+		        if(s.contains("Extractable"))
+                    extractable = s.contains("Yes");
 		        if(s.contains("Desynthesizable"))
 		            desynthLevel = (s.contains("No") ? null : Float.parseFloat(li.select("span").html()));
 		        if(s.contains("Dyeable"))
@@ -84,7 +82,7 @@ public class Equipable extends Item {
 		        if(s.contains("Projectable"))
 		            projectable = s.contains("Yes");
             }
-            if(convertible == null || dyeable == null || projectable == null)
+            if(extractable == null || dyeable == null || projectable == null)
                 throw new Exception("Ran into some trouble getting the booleans for item " + name);
 		    if(desynthLevel != null && desynthClass == null && repairClass != null)
 		        desynthClass = repairClass;
