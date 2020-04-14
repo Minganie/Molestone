@@ -94,6 +94,7 @@ public class RecipeTest {
             assertTrue(slops.isQuickSynthesisEnabled());
             assertTrue(slops.isHighQualityEnabled());
             assertFalse(slops.isCollectable());
+            assertFalse(slops.isExpertRecipe());
         } catch (Exception e) {
             fail("Failed to correctly parse craft data for " + lid + " because " + e.getMessage());
         }
@@ -119,6 +120,13 @@ public class RecipeTest {
             Recipe delivery = Recipe.get(lid);
             assertEquals("Near Eastern Antique", delivery.getName());
             assertTrue(delivery.isAlwaysCollectible());
+        } catch (Exception e) {
+            fail("Failed to correctly parse craft data for " + lid + " because " + e.getMessage());
+        }
+        lid = new Lid("dbb3329387e");
+        try {
+            Recipe ishguard80 = Recipe.get(lid);
+            assertTrue(ishguard80.isExpertRecipe());
         } catch (Exception e) {
             fail("Failed to correctly parse craft data for " + lid + " because " + e.getMessage());
         }

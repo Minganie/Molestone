@@ -139,6 +139,10 @@ public class Recipe {
      * Does this always craft a collectible, whether Collector's Glove is on or not?
      */
     protected boolean alwaysCollectible = false;
+    /**
+     * Is this an expert recipe?
+     */
+    protected boolean expertRecipe = false;
 
     /**
      * Fetch a recipe from its Lodestone id
@@ -204,6 +208,8 @@ public class Recipe {
                 facility = t;
             else if(t.contains("Equipment Required"))
                 equipment = getEquipmentLid(t);
+            else if(t.contains("Expert Recipe"))
+                expertRecipe = true;
             else
                 throw new Exception("Unknown craft condition! '" + t + "'");
         }
@@ -511,6 +517,14 @@ public class Recipe {
      */
     public boolean isAlwaysCollectible() {
         return alwaysCollectible;
+    }
+
+    /**
+     * Getter for whether this is an expert recipe
+     * @return Is it an expert recipe?
+     */
+    public boolean isExpertRecipe() {
+        return expertRecipe;
     }
 
     /**
