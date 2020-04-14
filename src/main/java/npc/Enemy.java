@@ -73,4 +73,30 @@ public class Enemy {
     public List<Lid> getRelatedDuties() {
         return relatedDuties;
     }
+
+    @Override
+    public String toString() {
+        StringBuilder spawns = new StringBuilder();
+        for(SpawnLocation sl : spawnLocations) {
+            spawns.append(sl.toString());
+            spawns.append(", ");
+        }
+        if(spawns.length() > 0)
+            spawns.delete(spawns.length()-2, spawns.length());
+        StringBuilder items = new StringBuilder();
+        for(Lid lid : droppedItems) {
+            items.append(lid.toString());
+            items.append(", ");
+        }
+        if(items.length() > 0)
+            items.delete(items.length()-2, items.length());
+        StringBuilder duties = new StringBuilder();
+        for(Lid lid : relatedDuties) {
+            spawns.append(", ");
+            spawns.append(lid.toString());
+        }
+        if(duties.length() > 0)
+            duties.delete(duties.length()-2, duties.length());
+        return String.format("%s @ %s (%s) i:(%s) d:(%s)", name, lid, spawns.toString(), items.toString(), duties.toString());
+    }
 }

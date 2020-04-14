@@ -70,4 +70,24 @@ public class Npc {
     public List<Lid> getRelatedQuests() {
         return relatedQuests;
     }
+
+
+    @Override
+    public String toString() {
+        StringBuilder avail = new StringBuilder();
+        for(Lid lid : availableQuests) {
+            avail.append(lid.toString());
+            avail.append(", ");
+        }
+        if(avail.length() > 0)
+            avail.delete(avail.length()-2, avail.length());
+        StringBuilder relat = new StringBuilder();
+        for(Lid lid : relatedQuests) {
+            relat.append(lid.toString());
+            relat.append(", ");
+        }
+        if(relat.length() > 0)
+            relat.delete(relat.length()-2, relat.length());
+        return String.format("%s @ %s (%s) aq:(%s) rq:(%s)", name, lid, (location != null ? location.toString() : ""), avail.toString(), relat.toString());
+    }
 }
