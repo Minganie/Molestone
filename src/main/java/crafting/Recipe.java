@@ -219,6 +219,9 @@ public class Recipe {
         switch (t.trim()) {
             case "Equipment Required: Ehcatl Wristgloves":
                 return "4902e88281a";
+            case "Equipment Required: ????":
+                //FIXME check if the relic tools are on the website next patch
+                return null;
             default:
                 throw new Exception("Unknown required equipment: '" + t + "'?");
         }
