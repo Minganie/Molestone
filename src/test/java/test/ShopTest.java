@@ -257,4 +257,20 @@ public class ShopTest {
             fail("Inappropriate parsing for " + shopLid + " because " + e.getMessage());
         }
     }
+
+    @Test
+    public void testVarious() throws Exception {
+        Lid shopLid = new Lid("0ba5004ab8e");
+//        try {
+//            Shop recompenseOfficer = Shop.get(shopLid);
+//        } catch (Exception e) {
+//            fail("Inappropriate parsing for " + shopLid + " because " + e.getMessage());
+//        }
+        shopLid = new Lid("caefe09de69");
+        try {
+            Shop denys = Shop.get(shopLid);
+        } catch (Exception e) {
+            fail("Inappropriate parsing for " + shopLid + " because " + e.getMessage());
+        }
+    }
 }

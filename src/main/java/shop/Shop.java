@@ -138,9 +138,9 @@ public class Shop {
             if (tabNames.size() == 0) {  // There is zero tabs
                 Elements sales = el.select("div > div > div > table > tbody > tr");
                 for (Element sale : sales) {
-                    Merchandise m = Merchandise.get(sale);
-                    Price p = Price.get(sale);
-                    this.sales.add(new Sale(type, m, p));
+                    Sale s = makeSale(sale, type, null, null);
+                    if(s != null)
+                        this.sales.add(s);
                 }
 
                 // THERE ARE TABS
@@ -169,12 +169,10 @@ public class Shop {
                     // THIS tab doesn't have subtabs
                     if (subTabNames.size() == 0) {
                         Elements sales = tab.select("table > tbody > tr");
-                        int mycpt = 0;
                         for (Element sale : sales) {
-                            Merchandise m = Merchandise.get(sale);
-                            Price p = Price.get(sale);
-                            this.sales.add(new Sale(type, tabName, m, p));
-                            mycpt++;
+                            Sale s = makeSale(sale, type, tabName, null);
+                            if(s != null)
+                                this.sales.add(s);
                         }
 
                         // THIS tab has subtabs
@@ -186,9 +184,9 @@ public class Shop {
                             Element subTabEl = tab.selectFirst(String.format(subTabDivId, i, j));
                             Elements sales = subTabEl.select("table > tbody > tr");
                             for (Element sale : sales) {
-                                Merchandise m = Merchandise.get(sale);
-                                Price p = Price.get(sale);
-                                this.sales.add(new Sale(type, tabName, subTabName, m, p));
+                                Sale s = makeSale(sale, type, tabName, subTabName);
+                                if(s != null)
+                                    this.sales.add(s);
                             }
                             j++;
                         }
@@ -197,6 +195,19 @@ public class Shop {
                 }
             }
         }
+    }
+    private Sale makeSale(Element sale, SaleType type, String tabName, String subTabName) throws Exception {
+        String itemName = sale.selectFirst("td:first-child").text();
+        if(!itemName.equals("???") && !itemName.equals("???1")) {
+            Merchandise m = Merchandise.get(sale);
+            Price p = Price.get(sale);
+            if(subTabName != null)
+                return new Sale(type, tabName, subTabName, m, p);
+            if(tabName != null)
+                return new Sale(type, tabName, m, p);
+            return new Sale(type, m, p);
+        } else
+            return null;
     }
 
     private ZonedCoords parseAreaAndCoords(String mumbo) throws ParseException {

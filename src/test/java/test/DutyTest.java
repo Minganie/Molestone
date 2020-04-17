@@ -118,4 +118,15 @@ public class DutyTest {
             fail(e.getMessage());
         }
     }
+
+    @Test
+    public void testAnamnesis() throws Exception {
+        Lid lid = new Lid("969e6501eb7");
+        try {
+            Duty anamnesis = Duty.get(lid);
+            System.out.println(anamnesis.toString());
+        } catch (Exception e) {
+            fail(e.getMessage());
+        }
+    }
 }
