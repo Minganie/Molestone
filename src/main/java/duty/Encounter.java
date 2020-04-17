@@ -164,19 +164,4 @@ public class Encounter {
             System.out.println("      " + lid.toString());
         }
     }
-
-    /**
-     * Get the pretty-formatted list of mobs fighting in this encounter
-     * @return A string like so "Mumuepo The Beholden, Franz The Fair, Langloisiert The Lionheart, Narasimha, Silent Moss The Solemn, U'linbho The Sand Devil"
-     */
-    public String getBossNames() {
-        StringBuilder b = new StringBuilder();
-        if(bossList.size() > 0) {
-            for(Lid boss : bossList) {
-                b.append(boss.get() + ", ");
-            }
-            b.delete(b.length()-2, b.length());
-        }
-        return b.toString();
-    }
 }
