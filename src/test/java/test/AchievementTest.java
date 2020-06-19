@@ -80,4 +80,15 @@ public class AchievementTest {
             fail("Unable to properly parse Out of Sight Out of Mind: " + e.getMessage());
         }
     }
+
+    @Test
+    public void testAchievsNotItems() throws Exception {
+        Lid lid = new Lid("fcd368656b8");
+        try {
+            Achievement blue = Achievement.get(lid);
+            assertNull(blue.getItemReward());
+        } catch (Exception e) {
+            fail("Unable to properly parse Blue Unchained");
+        }
+    }
 }

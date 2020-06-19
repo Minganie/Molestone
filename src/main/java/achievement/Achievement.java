@@ -3,6 +3,7 @@ package achievement;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 import util.JsoupUtils;
 import util.Lid;
 
@@ -87,8 +88,18 @@ public class Achievement {
             }
         }
         // find reward that's an item
-        if(doc.select("a.db_popup").first() != null)
-            this.itemReward = Lid.parseLid(doc.select("a.db_popup").attr("href"));
+        if(doc.select("h4:matchesOwn(Item Awarded)").first() != null) {
+            Elements els = doc.selectFirst("h4:matchesOwn(Item Awarded) + div table tbody").select("tr a.db_popup");
+            switch (els.size()) {
+                case 0:
+                    throw new ParseException("Found 'Item Awarded' table, but no item within", 0);
+                case 1:
+                    this.itemReward = Lid.parseLid(els.get(0).attr("href"));
+                    break;
+                default:
+                    throw new ParseException("Found 'Item Awarded' table with more than one item within", 0);
+            }
+        }
     }
 
     /**
