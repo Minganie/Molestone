@@ -7,7 +7,7 @@ Get it from maven:
         <dependency>
             <groupId>com.melodysmaps</groupId>
             <artifactId>Molestone</artifactId>
-            <version>1.3</version>
+            <version>1.5.1</version>
         </dependency>
 ```
 
